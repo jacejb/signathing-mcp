@@ -4,7 +4,8 @@
 //   node verify-signathing.mjs evidence.json [original.pdf] [signed.pdf] [--offline]
 //
 // Checks, in order:
-//   1. The PDFs you hold hash to the SHA-256 values in the package.
+//   1. The PDFs you hold hash to the SHA-256 values in the package, and the
+//      signed PDF carries a digital seal when the package says it does.
 //   2. Every event's canonical preimage hashes to its detail_hash.
 //   3. Every event's chain entry hash recomputes from (prev_hash, seq, at,
 //      type, fingerprint, detail_hash), and the document fingerprint
@@ -15,6 +16,8 @@
 // Nothing here needs an account or trusts the package's issuer: a forged
 // package fails step 3 or 4 unless the forger also controls the public log,
 // the Internet Archive's copies of it, and every verifier that ran before.
+// The digital seal itself is validated by a PDF reader (pdfsig, Acrobat)
+// against https://signathing.com/.well-known/signathing-seal.pem
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -39,8 +42,20 @@ if (args[1]) {
   h === pkg.document.original_sha256 ? ok(`original PDF matches ${h}`) : bad(`original PDF hashes to ${h}, package says ${pkg.document.original_sha256}`);
 }
 if (args[2]) {
-  const h = sha(readFileSync(args[2]));
+  const signedBytes = readFileSync(args[2]);
+  const h = sha(signedBytes);
   h === pkg.document.signed_sha256 ? ok(`signed PDF matches ${h}`) : bad(`signed PDF hashes to ${h}, package says ${pkg.document.signed_sha256}`);
+  const tail = signedBytes.subarray(Math.max(0, signedBytes.length - 2000000)).toString("latin1");
+  const sigDict = /\/Type\s*\/Sig\b/;
+  const byteRange = /\/ByteRange\s*\[/;
+  const sealed = sigDict.test(tail) && byteRange.test(tail);
+  if (pkg.document.sealed_at) {
+    sealed
+      ? ok(`signed PDF carries a digital seal (validate it with pdfsig or Acrobat; certificate ${pkg.document.seal?.fingerprint_sha256 || ""})`)
+      : bad("package says sealed but the PDF has no signature dictionary");
+  } else {
+    console.log("  note this document was completed before sealing was enabled, or sealing was off");
+  }
 }
 
 // 2 + 3. Hashes inside the package

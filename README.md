@@ -13,7 +13,7 @@ Operated by AllContraX LLC, Kentucky, USA. The Signathing app and website stay f
 
 | Tool | What it does |
 | --- | --- |
-| `send_document` | Upload a PDF (https URL or base64), name up to 4 signers and 4 view-only recipients, optionally place signature/initials/date/text fields. Signers get a private link by email (and text). One billable unit. |
+| `send_document` | Upload a PDF (https URL or base64), name up to 25 signers and 25 view-only recipients, optionally place signature, initials, date, name, email, text, number, checkbox, radio or dropdown fields. Signers get a private link by email (and text). One billable unit. |
 | `get_document` | Status, signers with viewed/signed times, download links, event history. |
 | `list_documents` | Your recent documents, filterable by status. |
 | `remind_document` | Re-send links to everyone who has not signed (once an hour). |
@@ -88,7 +88,7 @@ Agent -> send_document { file_url, title: "Lease", signers: [{ name: "Pat Lee", 
 Signathing -> { id: 58, status: "sent", signers: [{ signing_url: "https://signathing.com/sign/..." }], billing: { charged_tenths: 0 } }
 ```
 
-Pat gets an email, signs in the browser, and the agent can call `get_document` or receive a webhook. The certified PDF carries a certificate page and a verification code per signature.
+Pat gets an email, signs in the browser, and the agent can call `get_document` or receive a webhook. The certified PDF is digitally sealed and carries a certificate page and a verification code per signature.
 
 ## License
 
