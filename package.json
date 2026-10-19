@@ -1,0 +1,15 @@
+{
+  "name": "signathing-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Signathing: send PDFs for legally binding e-signature from any AI agent, with a public hash-chained evidence log anyone can verify. Remote server at https://signathing.com/api/mcp plus a dependency-free stdio bridge.",
+  "type": "module",
+  "bin": { "signathing-mcp": "bin/signathing-mcp.mjs" },
+  "files": ["bin", "verifier", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "keywords": ["mcp", "model-context-protocol", "e-signature", "esignature", "docusign-alternative", "contracts", "ai-agents", "evidence", "signathing"],
+  "homepage": "https://signathing.com/developers",
+  "repository": { "type": "git", "url": "https://github.com/jacejb/signathing-mcp.git" },
+  "bugs": { "email": "info@allcontrax.com" },
+  "license": "MIT",
+  "author": "AllContraX LLC"
+}
