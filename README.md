@@ -1,6 +1,6 @@
 # Signathing MCP server
 
-Send PDFs for legally binding e-signature from any AI agent, and get back a certified copy whose history anyone can verify without trusting the sender or Signathing.
+Send PDFs for e-signature from any AI agent, with ESIGN and UETA consent captured on every signature, and get back a certified copy whose history anyone can verify without trusting the sender or Signathing.
 
 - **Remote server:** `https://signathing.com/api/mcp` (Streamable HTTP). Sign in with OAuth, or send an API key as a bearer header.
 - **Free tier:** 100 documents a month, no card. Then $0.06 a document (101 to 500), $0.03 (501 to 3,000), $0.025 (3,001+), prepaid.
@@ -19,7 +19,7 @@ Operated by AllContraX LLC, Kentucky, USA. The Signathing app and website stay f
 | `remind_document` | Re-send links to everyone who has not signed (once an hour). |
 | `void_document` | Withdraw an open document. Within 10 minutes of sending, the unit is refunded. |
 | `get_account` | Prepaid balance, documents used this month, free documents left, projected run-out. |
-| `get_evidence` | Court-ready evidence package: PDF hashes, every signer and event with its position in the public evidence log, and the recipe to verify it. |
+| `get_evidence` | Evidence package: PDF hashes, every signer and event with its position in the public evidence log, and the recipe to verify it. |
 | `verify_signature_code` | Look up the code stamped beside any Signathing signature. Works for any document. |
 
 ## Connect
