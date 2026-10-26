@@ -71,7 +71,14 @@ async function forward(message) {
 }
 
 const rl = createInterface({ input: process.stdin, crlfDelay: Infinity });
-rl.on("line", async (line) => {
+// Requests still in flight when stdin closes get to finish before we exit.
+const inflight = new Set();
+rl.on("line", (line) => {
+  const p = handle(line).catch(() => undefined);
+  inflight.add(p);
+  p.finally(() => inflight.delete(p));
+});
+async function handle(line) {
   const trimmed = line.trim();
   if (!trimmed) return;
   let message;
@@ -92,5 +99,7 @@ rl.on("line", async (line) => {
   } catch (error) {
     out({ jsonrpc: "2.0", id: message.id ?? null, error: { code: -32603, message: `Could not reach Signathing: ${error?.message || error}` } });
   }
+}
+rl.on("close", () => {
+  Promise.allSettled([...inflight]).then(() => process.exit(0));
 });
-rl.on("close", () => process.exit(0));
