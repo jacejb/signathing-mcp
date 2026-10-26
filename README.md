@@ -80,6 +80,33 @@ A signature only matters on the day it is disputed. On that day the party that c
 node verifier/verify-signathing.mjs evidence.json original.pdf signed.pdf
 ```
 
+## Example: the whole loop, verified
+
+`examples/agent-loop.mjs` (Node 18+, no dependencies, public domain) sends a PDF, waits for the signature, pulls the evidence package and the certified PDF, recomputes every hash and chain entry, confirms each entry against the public log, and resolves the verification code publicly. It is the loop an agent should run before it treats an agreement as done.
+
+```bash
+SIGNATHING_API_KEY=sk_live_... node examples/agent-loop.mjs --name "Pat Lee" --email pat@example.com
+```
+
+```
+[2] Send for signature
+  ok   document 71 (sent); billing {"charged_tenths":0,"unit_this_month":1}
+  ok   server's original_sha256 matches the bytes we sent
+[3] Waiting for Pat Lee to sign (up to 30 min)
+  ok   completed at 2026-10-26T02:02:00Z; signed PDF SHA-256 afe6...; sealed=true
+[4] Evidence package and certified PDF
+  ok   signed PDF hashes to document.signed_sha256
+[5] Independent verification
+  ok   event 609 completed -> chain seq 589
+  ok   seq 589 is identical in the public log
+  ok   public log slice 583 to 590 recomputes end to end
+[6] Public checks anyone can repeat
+  ok   verification code resolves publicly to this document and its signed hash
+VERIFIED: document 71, 6 events, all hashes and public-log entries recomputed.
+```
+
+With MCP it is four tool calls: `send_document`, `get_document` (or the `document.completed` webhook), `get_evidence`, then the verifier on what came back. The day's seal, Internet Archive snapshot and OpenTimestamps proof arrive after midnight UTC; a second verifier run the next day checks those too.
+
 ## Example: an agent sends a lease
 
 ```
