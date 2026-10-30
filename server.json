@@ -1,0 +1,33 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.signathing/mcp",
+  "title": "Signathing e-signature",
+  "description": "Send PDFs for e-signature from AI agents, with a public hash-chained evidence log anyone can verify",
+  "version": "1.1.1",
+  "websiteUrl": "https://signathing.com/learn/mcp-server-for-e-signatures",
+  "repository": {
+    "url": "https://github.com/jacejb/signathing-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://signathing.com/brand/signathing-icon-512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://signathing.com/api/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional. Bearer sk_live_... from signathing.com/dashboard/api. Leave it out to sign in with OAuth (dynamic client registration, PKCE).",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
