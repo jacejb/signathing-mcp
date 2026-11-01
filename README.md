@@ -18,6 +18,7 @@ Operated by AllContraX LLC, Kentucky, USA. The Signathing app and website stay f
 | `list_documents` | Your recent documents, filterable by status. |
 | `remind_document` | Re-send links to everyone who has not signed (once an hour). |
 | `void_document` | Withdraw an open document. Within 10 minutes of sending, the unit is refunded. |
+| `extend_document` | Give an expired document 14 more days and fresh links for everyone still waited on. |
 | `get_account` | Prepaid balance, documents used this month, free documents left, projected run-out. |
 | `get_evidence` | Evidence package: PDF hashes, every signer and event with its position in the public evidence log, and the recipe to verify it. |
 | `verify_signature_code` | Look up the code stamped beside any Signathing signature. Works for any document. |
