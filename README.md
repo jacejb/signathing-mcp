@@ -13,7 +13,7 @@ Operated by AllContraX LLC, Kentucky, USA. The Signathing app and website stay f
 
 | Tool | What it does |
 | --- | --- |
-| `send_document` | Upload a PDF (https URL or base64), name up to 25 signers and 25 view-only recipients, optionally place signature, initials, date, name, email, text, number, checkbox, radio or dropdown fields. Signers get a private link by email (and text). Per signer, `payment_amount_cents` collects a card payment after they sign (into the sender's own Stripe account, no platform fee; the document completes when paid) and `id_verification: true` requires a government ID plus selfie check before signing ($2 an attempt from the prepaid balance). One billable unit. |
+| `send_document` | Upload a PDF (https URL or base64), name up to 25 signers and 25 view-only recipients, optionally place signature, initials, date, name, email, text, number, checkbox, radio or dropdown fields. Signers get a private link by email (and text). Per signer, `payment_amount_cents` collects a card payment after they sign (into the sender's own Stripe account, no platform fee; the document completes when paid) and `id_verification: true` requires a government ID plus selfie check before signing ($2 an attempt from the prepaid balance). `language: "es"` sends that signer's emails, texts and signing page in Spanish (default `en`). One billable unit. |
 | `get_document` | Status, signers with viewed/signed times, download links, event history. |
 | `list_documents` | Your recent documents, filterable by status. |
 | `remind_document` | Re-send links to everyone who has not signed (once an hour). |
