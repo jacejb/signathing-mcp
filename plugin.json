@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "signathing",
+  "version": "1.1.1",
+  "description": "Send PDFs for e-signature, check who has signed, and pull an evidence record anyone can verify.",
+  "author": {
+    "name": "AllContraX LLC",
+    "email": "info@signathing.com",
+    "url": "https://signathing.com"
+  },
+  "homepage": "https://signathing.com/developers",
+  "repository": "https://github.com/jacejb/signathing-mcp",
+  "license": "MIT",
+  "keywords": ["e-signature", "esignature", "contracts", "pdf", "documents", "evidence", "mcp"]
+}

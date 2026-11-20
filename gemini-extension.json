@@ -1,0 +1,10 @@
+{
+  "name": "signathing",
+  "version": "1.1.1",
+  "description": "Send PDFs for e-signature, check who has signed, and pull an evidence record anyone can verify.",
+  "mcpServers": {
+    "signathing": {
+      "httpUrl": "https://signathing.com/api/mcp"
+    }
+  }
+}

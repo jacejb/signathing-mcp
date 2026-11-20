@@ -1,42 +1,55 @@
 # Signathing MCP server
 
-Send PDFs for e-signature from any AI agent, with ESIGN and UETA consent captured on every signature, and get back a certified copy whose history anyone can verify without trusting the sender or Signathing.
+Send PDFs for e-signature from any AI assistant or agent, with ESIGN and UETA consent captured on every signature, and get back a certified copy whose history anyone can verify without trusting the sender or Signathing.
 
 - **Remote server:** `https://signathing.com/api/mcp` (Streamable HTTP). Sign in with OAuth, or send an API key as a bearer header.
 - **Free tier:** 100 documents a month, no card. Then $0.06 a document (101 to 500), $0.03 (501 to 3,000), $0.025 (3,001+), prepaid.
+- **Test mode:** `test: true` on `send_document` sends every message to your own account email, costs nothing, and the document erases itself after a week.
 - **Evidence:** every signing event is appended to a public hash chain, sealed daily and archived with the Internet Archive. [signathing.com/transparency](https://signathing.com/transparency)
 - **Docs:** [signathing.com/developers](https://signathing.com/developers) · OpenAPI: [/api/v1/openapi.json](https://signathing.com/api/v1/openapi.json) · [/llms.txt](https://signathing.com/llms.txt)
 
-Operated by AllContraX LLC, Kentucky, USA. The Signathing app and website stay free for people; the API and MCP server are for software.
+Built and run by AllContraX LLC, a veteran-owned US software company. The Signathing app and website stay free for people; the API and MCP server are for software.
 
 ## Tools
 
-| Tool | What it does |
-| --- | --- |
-| `send_document` | Upload a PDF (https URL or base64), name up to 25 signers and 25 view-only recipients, optionally place signature, initials, date, name, email, text, number, checkbox, radio or dropdown fields. Signers get a private link by email (and text). Per signer, `payment_amount_cents` collects a card payment after they sign (into the sender's own Stripe account, no platform fee; the document completes when paid) and `id_verification: true` requires a government ID plus selfie check before signing ($2 an attempt from the prepaid balance). `language: "es"` sends that signer's emails, texts and signing page in Spanish (default `en`). One billable unit. |
-| `get_document` | Status, signers with viewed/signed times, download links, event history. |
-| `list_documents` | Your recent documents, filterable by status. |
-| `remind_document` | Re-send links to everyone who has not signed (once an hour). |
-| `void_document` | Withdraw an open document. Within 10 minutes of sending, the unit is refunded. |
-| `extend_document` | Give an expired document 14 more days and fresh links for everyone still waited on. |
-| `get_account` | Prepaid balance, documents used this month, free documents left, projected run-out. |
-| `get_evidence` | Evidence package: PDF hashes, every signer and event with its position in the public evidence log, and the recipe to verify it. |
-| `verify_signature_code` | Look up the code stamped beside any Signathing signature. Works for any document. |
+Twelve tools. Each one is labeled for the assistant: six only read, four add something (a document, a reminder, a later deadline), and two are marked destructive, so an assistant asks before it runs them.
+
+| Tool | Kind | What it does |
+| --- | --- | --- |
+| `send_document` | adds | Upload a PDF (https URL or base64) and name up to 25 signers or approvers, plus view-only and CC recipients. Place signature, initials, date, name, email, text, number, checkbox, radio, dropdown or attachment fields by coordinates, or by `anchor`: the words printed beside the line. Signers get a private link by email, by text, or both. Per signer, `payment_amount_cents` asks for a card payment after they sign (on Stripe's page, into the sender's own Stripe account; the document completes when paid), `id_verification: true` requires an ID check before signing ($2 an attempt from the prepaid balance), and `language: "es"` sends that signer's messages and signing page in Spanish. `test: true` is a free trial run that reaches nobody but you. One billable unit. |
+| `send_from_template` | adds | Send a saved template, one signer per role. |
+| `remind_document` | adds | Re-send links to everyone who has not signed (once an hour). |
+| `extend_document` | adds | Give an expired document 14 more days and fresh links for everyone still waited on. |
+| `void_document` | destructive | Withdraw an open document. Within 10 minutes of sending, the unit is refunded. |
+| `delete_document` | destructive | Erase a document you sent. A completed one is erased 7 days later, after everyone on it is told to save their copy. Hashes and times stay, so a signed copy someone holds can still be verified. |
+| `get_document` | reads | Status, signers with viewed and signed times, signing links, download links, event history. |
+| `list_documents` | reads | Your recent documents as short rows (status, title, dates, who has signed), filterable by status. |
+| `list_templates` | reads | Your saved templates: name, signer roles, field count. |
+| `get_account` | reads | Prepaid balance, documents and texts used this month, what is left free. |
+| `get_evidence` | reads | Evidence package: PDF hashes, every signer and event with its position in the public evidence log, and the recipe to verify it. |
+| `verify_signature_code` | reads | Look up the code stamped beside any Signathing signature. Works for any document. |
 
 ## Connect
 
-### Claude.ai, ChatGPT, Grok apps (OAuth)
+### Claude (OAuth)
 
-Add a custom connector / remote MCP server with the URL `https://signathing.com/api/mcp`. You will be sent to signathing.com to sign in and approve. Disconnect any time under API in your Signathing dashboard.
+Signathing is in Claude's connector directory: open Connectors, search for Signathing, and connect. Or add a custom connector with the URL `https://signathing.com/api/mcp`. Either way you are sent to signathing.com to sign in and approve.
+
+### ChatGPT, Grok Bot, Town, Lindy, Poke, Manus and other assistants (OAuth)
+
+Add a remote MCP server or custom connector with the URL `https://signathing.com/api/mcp`. Leave any client ID field empty: the server registers each app itself. You are sent to signathing.com to sign in and approve. Disconnect any time under API in your Signathing dashboard.
 
 ### Claude Code
 
 ```bash
-claude mcp add --transport http signathing https://signathing.com/api/mcp \
-  --header "Authorization: Bearer sk_live_..."
+claude mcp add --transport http signathing https://signathing.com/api/mcp
 ```
 
-Or without a key, using OAuth: `claude mcp add --transport http signathing https://signathing.com/api/mcp` and run `/mcp` to sign in.
+Then run `/mcp` to sign in. Or with an API key and no browser step:
+
+```bash
+claude mcp add --transport http signathing https://signathing.com/api/mcp   --header "Authorization: Bearer sk_live_..."
+```
 
 ### Cursor, VS Code, Windsurf (`mcp.json`)
 
@@ -45,6 +58,12 @@ Or without a key, using OAuth: `claude mcp add --transport http signathing https
     "url": "https://signathing.com/api/mcp",
     "headers": { "Authorization": "Bearer sk_live_..." } } } }
 ```
+
+Cursor can also sign in with OAuth: leave `headers` out and approve in the browser.
+
+### Gemini CLI
+
+This repository is also a Gemini CLI extension (`gemini-extension.json` at the root). Install it as an extension from this repository's URL, then run `/mcp auth signathing` to sign in.
 
 ### Grok (xAI Responses API)
 
@@ -71,7 +90,7 @@ This repository ships a dependency-free bridge for clients that cannot speak HTT
     "env": { "SIGNATHING_API_KEY": "sk_live_..." } } } }
 ```
 
-Create a key at [signathing.com/dashboard/api](https://signathing.com/dashboard/api).
+Create a key at [signathing.com/dashboard/api](https://signathing.com/dashboard/api). Step by step for an agent doing the install: [llms-install.md](llms-install.md).
 
 ## Why a third party instead of letting the agent sign things itself
 
